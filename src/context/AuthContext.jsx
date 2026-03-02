@@ -11,6 +11,26 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Check token expiration periodically
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const currentUser = authService.getCurrentUser();
+      if (!currentUser && isAuthenticated) {
+        // Token expired, logout user
+        console.log('Token expired, logging out...');
+        logout();
+      }
+    };
+
+    // Check immediately on mount
+    checkTokenExpiration();
+
+    // Check every minute
+    const interval = setInterval(checkTokenExpiration, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
   useEffect(() => {
     // Check if user is already logged in
     const currentUser = authService.getCurrentUser();

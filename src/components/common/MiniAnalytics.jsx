@@ -168,25 +168,59 @@ export default function MiniAnalytics() {
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
           Last 7 Days Activity
         </h3>
-        <div className="flex items-end justify-between gap-2 h-40">
-          {analytics.weeklyData.map((day, index) => (
-            <div key={day.date} className="flex-1 flex flex-col items-center gap-2">
-              <motion.div
-                initial={{ height: 0 }}
-                animate={{ height: `${(day.count / maxCount) * 100}%` }}
-                transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
-                className="w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg min-h-[4px] relative group"
-              >
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {day.count} tasks
-                </div>
-              </motion.div>
-              <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                {day.day}
-              </span>
+        
+        {/* Show message if no data */}
+        {analytics.weeklyData.every(d => d.count === 0) ? (
+          <div className="h-40 flex items-center justify-center text-gray-500 dark:text-gray-400">
+            <div className="text-center">
+              <p className="text-sm mb-1">No tasks completed yet</p>
+              <p className="text-xs">Complete tasks to see your activity!</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className="flex items-end justify-between gap-2 h-40">
+            {analytics.weeklyData.map((day, index) => {
+              const heightPercentage = maxCount > 0 ? (day.count / maxCount) * 100 : 0;
+              const hasData = day.count > 0;
+              
+              return (
+                <div key={day.date} className="flex-1 flex flex-col items-center gap-2">
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ 
+                      height: hasData ? `${heightPercentage}%` : '4px',
+                      opacity: hasData ? 1 : 0.3
+                    }}
+                    transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+                    className={`w-full rounded-t-lg relative group ${
+                      hasData 
+                        ? 'bg-gradient-to-t from-blue-500 to-blue-400' 
+                        : 'bg-gray-300 dark:bg-gray-600'
+                    }`}
+                    style={{ minHeight: '4px' }}
+                  >
+                    {hasData && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        whileHover={{ opacity: 1, y: -10 }}
+                        className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap shadow-lg z-10"
+                      >
+                        {day.count} {day.count === 1 ? 'task' : 'tasks'}
+                      </motion.div>
+                    )}
+                  </motion.div>
+                  <span className={`text-xs font-medium ${
+                    hasData 
+                      ? 'text-gray-700 dark:text-gray-300' 
+                      : 'text-gray-400 dark:text-gray-500'
+                  }`}>
+                    {day.day}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
     </div>
   );

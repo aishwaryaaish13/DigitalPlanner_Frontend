@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ProtectedRoute } from './components/common/ProtectedRoute.jsx';
 import { Sidebar } from './components/common/Sidebar.jsx';
 import { NotificationProvider } from './components/common/NotificationProvider.jsx';
+import { SessionTimeout } from './components/common/SessionTimeout.jsx';
 import { Skeleton } from './components/common/Skeleton.jsx';
 
 // Pages
@@ -67,6 +68,9 @@ export const App = () => {
 
       {/* Toast Notifications */}
       <NotificationProvider />
+
+      {/* Session Timeout Warning */}
+      <SessionTimeout />
     </Router>
   );
 };

@@ -292,12 +292,12 @@ export const TasksList = () => {
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="input-base"
+              className="input-base min-w-[160px]"
             >
-              <option value="all">All Priorities</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="all">🎯 All Priorities</option>
+              <option value="high">🔴 High Priority</option>
+              <option value="medium">🟡 Medium Priority</option>
+              <option value="low">🔵 Low Priority</option>
             </select>
             <Button onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
@@ -392,15 +392,18 @@ export const TasksList = () => {
             value={newTask.description}
             onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
           />
-          <select 
-            className="input-base w-full"
-            value={newTask.priority}
-            onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-          >
-            <option value="high">High Priority</option>
-            <option value="medium">Medium Priority</option>
-            <option value="low">Low Priority</option>
-          </select>
+          <div>
+            <label className="block text-sm font-medium mb-2">Priority Level</label>
+            <select 
+              className="input-base w-full"
+              value={newTask.priority}
+              onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+            >
+              <option value="high">🔴 High Priority</option>
+              <option value="medium">🟡 Medium Priority</option>
+              <option value="low">🔵 Low Priority</option>
+            </select>
+          </div>
           <Button onClick={handleAddTask} className="w-full">
             Create Task
           </Button>
@@ -477,15 +480,33 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <motion.h4
-            className={`font-medium text-sm transition-all ${
-              task.completed
-                ? 'line-through text-muted-foreground'
-                : 'text-foreground'
-            }`}
-          >
-            {task.title}
-          </motion.h4>
+          <div className="flex items-center gap-2 mb-1">
+            <motion.h4
+              className={`font-medium text-sm transition-all ${
+                task.completed
+                  ? 'line-through text-muted-foreground'
+                  : 'text-foreground'
+              }`}
+            >
+              {task.title}
+            </motion.h4>
+            {/* Priority Badge - Always Visible */}
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.1 }}
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                task.priority === 'high'
+                  ? 'bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30'
+                  : task.priority === 'medium'
+                  ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-500/30'
+                  : 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30'
+              }`}
+            >
+              <Flag className="w-3 h-3" />
+              {task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low'}
+            </motion.span>
+          </div>
           <p className="text-sm text-muted-foreground truncate">
             {task.description}
           </p>
@@ -497,15 +518,6 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 1 }}
         >
-          <motion.span
-            className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${getPriorityColor(
-              task.priority
-            )}`}
-            whileHover={{ scale: 1.05 }}
-          >
-            <Flag className="w-3 h-3" />
-            {task.priority}
-          </motion.span>
           <motion.button
             onClick={onDelete}
             whileHover={{ scale: 1.1, backgroundColor: 'rgba(239, 68, 68, 0.1)' }}

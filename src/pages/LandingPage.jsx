@@ -122,12 +122,45 @@ export const LandingPage = () => {
               </div>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Your Digital Life,
-              <br />
-              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Organized
-              </span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <motion.span
+                className="block bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
+              >
+                {Array.from("Structured Planning,").map((char, index) => (
+                  <motion.span
+                    key={`line1-${index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.03,
+                      ease: "easeOut"
+                    }}
+                    className="inline-block"
+                    style={{ display: char === ' ' ? 'inline' : 'inline-block' }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                ))}
+              </motion.span>
+              <motion.span className="block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                {Array.from("Meaningful Reflection").map((char, index) => (
+                  <motion.span
+                    key={`line2-${index}`}
+                    initial={{ opacity: 0, y: 20, rotateX: -90 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.6 + index * 0.04,
+                      ease: "easeOut"
+                    }}
+                    className="inline-block"
+                    style={{ display: char === ' ' ? 'inline' : 'inline-block' }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                ))}
+              </motion.span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">

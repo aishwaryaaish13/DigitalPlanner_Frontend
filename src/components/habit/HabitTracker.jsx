@@ -20,11 +20,24 @@ import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent, CardHeader, CardTitle } from '../common/Card.jsx';
 import { Button } from '../common/Button.jsx';
 import { Input } from '../common/Input.jsx';
-import { Plus, Check, X, Flame, GripVertical, Loader2 } from 'lucide-react';
+import { Plus, Check, X, Flame, GripVertical, Loader2, Sparkles, Zap } from 'lucide-react';
 import { habitService } from '../../services/habitService.js';
 import { useNotifications } from '../../hooks/useNotifications.js';
 import { createNotification } from '../../utils/notificationHelpers.js';
 import toast from 'react-hot-toast';
+
+const habitQuotes = [
+  "We are what we repeatedly do. Excellence is not an act, but a habit.",
+  "Motivation gets you started. Habit keeps you going.",
+  "Small daily improvements lead to stunning results.",
+  "Your habits shape your identity, and your identity shapes your habits.",
+  "Success is the product of daily habits, not once-in-a-lifetime transformations.",
+  "First we make our habits, then our habits make us.",
+  "The secret of change is to focus all your energy on building the new.",
+  "Every action you take is a vote for the person you wish to become.",
+  "Consistency is the key to building lasting habits.",
+  "Don't break the chain. Show up every day."
+];
 
 export const HabitTracker = () => {
   const [habits, setHabits] = useState([]);
@@ -35,11 +48,30 @@ export const HabitTracker = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [currentQuote, setCurrentQuote] = useState('');
+  const [quoteIndex, setQuoteIndex] = useState(0);
   const { addNotification } = useNotifications();
 
   // Fetch habits on component mount
   useEffect(() => {
     fetchHabits();
+    // Set random habit quote
+    const randomIndex = Math.floor(Math.random() * habitQuotes.length);
+    setQuoteIndex(randomIndex);
+    setCurrentQuote(habitQuotes[randomIndex]);
+  }, []);
+
+  // Auto-rotate quotes every 12 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuoteIndex((prev) => {
+        const nextIndex = (prev + 1) % habitQuotes.length;
+        setCurrentQuote(habitQuotes[nextIndex]);
+        return nextIndex;
+      });
+    }, 12000); // Change quote every 12 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchHabits = async () => {
@@ -236,6 +268,91 @@ export const HabitTracker = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header with Quote */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-3"
+      >
+        <div className="flex items-center justify-center gap-3">
+          <motion.div
+            animate={{ 
+              rotate: [0, 360],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+          >
+            <Flame className="w-8 h-8 text-orange-500" />
+          </motion.div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent">
+            Habit Tracker
+          </h1>
+          <motion.div
+            animate={{ 
+              scale: [1, 1.3, 1],
+              rotate: [0, 10, -10, 0]
+            }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+          >
+            <Zap className="w-8 h-8 text-yellow-500" />
+          </motion.div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="relative"
+        >
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-red-500/20 to-pink-500/20 blur-xl"
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.4, 0.7, 0.4],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={quoteIndex}
+              initial={{ opacity: 0, y: 30, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -30, scale: 0.8 }}
+              transition={{ 
+                duration: 0.7,
+                ease: "easeOut"
+              }}
+              className="relative text-base md:text-lg italic text-muted-foreground font-medium px-6 py-3 bg-card/60 backdrop-blur-sm rounded-xl border-2 border-orange-500/30 shadow-lg"
+            >
+              <motion.span
+                className="inline-flex items-center gap-2"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                style={{
+                  backgroundImage: 'linear-gradient(90deg, currentColor 0%, #f97316 25%, #ef4444 50%, #ec4899 75%, currentColor 100%)',
+                  backgroundSize: '200% auto',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                }}
+              >
+                <Sparkles className="w-4 h-4 text-orange-500" />
+                "{currentQuote}"
+                <Sparkles className="w-4 h-4 text-pink-500" />
+              </motion.span>
+            </motion.p>
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
+
       {/* Summary */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

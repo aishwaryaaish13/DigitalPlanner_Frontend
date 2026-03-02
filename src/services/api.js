@@ -14,9 +14,21 @@ api.interceptors.request.use(
   (config) => {
     const userInfo = localStorage.getItem('userInfo');
     if (userInfo) {
-      const { token } = JSON.parse(userInfo);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      try {
+        const { token, expiresAt } = JSON.parse(userInfo);
+        
+        // Check if token is expired before making request
+        if (expiresAt && Date.now() > expiresAt) {
+          localStorage.removeItem('userInfo');
+          window.location.href = '/login';
+          return Promise.reject(new Error('Token expired'));
+        }
+        
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.error('Error parsing userInfo:', error);
       }
     }
     return config;
