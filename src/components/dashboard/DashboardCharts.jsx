@@ -28,15 +28,23 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  },
 };
 
 const moodColors = {
@@ -162,29 +170,42 @@ export const DashboardCharts = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      className="grid grid-cols-1 lg:grid-cols-2 gap-4"
     >
       {/* Task Completion Chart */}
-      <motion.div variants={itemVariants}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">📊 Weekly Tasks (Last 7 Days)</CardTitle>
+      <motion.div 
+        variants={itemVariants}
+        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        className="group"
+      >
+        <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <CardHeader className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <span className="group-hover:text-primary transition-colors">Weekly Tasks (Last 7 Days)</span>
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             {weeklyData.length > 0 && weeklyData.some(d => d.tasks > 0) ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'var(--background)', 
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px'
+                    }}
+                  />
                   <Legend />
-                  <Bar dataKey="tasks" fill="#3b82f6" name="Total Tasks" />
-                  <Bar dataKey="completed" fill="#10b981" name="Completed" />
+                  <Bar dataKey="tasks" fill="#3b82f6" name="Total Tasks" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="completed" fill="#10b981" name="Completed" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+              <div className="h-[250px] flex items-center justify-center text-muted-foreground">
                 No task data yet. Create some tasks to see the chart!
               </div>
             )}
@@ -193,14 +214,21 @@ export const DashboardCharts = () => {
       </motion.div>
 
       {/* Mood Distribution */}
-      <motion.div variants={itemVariants}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">😊 Mood Distribution</CardTitle>
+      <motion.div 
+        variants={itemVariants}
+        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        className="group"
+      >
+        <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <CardHeader className="bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span className="text-2xl">😊</span>
+              <span className="group-hover:text-primary transition-colors">Mood Distribution</span>
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             {moodDistribution.length > 0 && moodDistribution[0].name !== 'No Data' ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
                     data={moodDistribution}
@@ -216,11 +244,17 @@ export const DashboardCharts = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'var(--background)', 
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px'
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+              <div className="h-[250px] flex items-center justify-center text-muted-foreground">
                 No mood data yet. Log your mood to see the distribution!
               </div>
             )}
@@ -229,49 +263,80 @@ export const DashboardCharts = () => {
       </motion.div>
 
       {/* Goals Progress */}
-      {goalsData.length > 0 && (
-        <motion.div variants={itemVariants}>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">🎯 Top 5 Goals Progress</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+      <motion.div 
+        variants={itemVariants}
+        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        className="group"
+      >
+        <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <CardHeader className="bg-gradient-to-r from-violet-500/10 to-purple-500/10">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              <span className="group-hover:text-primary transition-colors">Goals Progress</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            {goalsData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={goalsData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis type="number" domain={[0, 100]} />
                   <YAxis dataKey="name" type="category" width={100} />
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'var(--background)', 
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px'
+                    }}
+                  />
                   <Legend />
-                  <Bar dataKey="progress" fill="#8b5cf6" name="Progress %" />
+                  <Bar dataKey="progress" fill="#8b5cf6" name="Progress %" radius={[0, 8, 8, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+            ) : (
+              <div className="h-[250px] flex items-center justify-center text-muted-foreground">
+                No goals yet. Create some goals to track progress!
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Mood Trend Line */}
-      <motion.div variants={itemVariants} className={goalsData.length > 0 ? '' : 'lg:col-span-2'}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">📈 Mood Trend (Last 7 Days)</CardTitle>
+      <motion.div 
+        variants={itemVariants}
+        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+        className="group"
+      >
+        <Card className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <CardHeader className="bg-gradient-to-r from-amber-500/10 to-orange-500/10">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <span className="text-2xl">📈</span>
+              <span className="group-hover:text-primary transition-colors">Mood Trend (Last 7 Days)</span>
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             {weeklyData.length > 0 && weeklyData.some(d => d.mood > 0) ? (
               <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" />
                   <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} />
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'var(--background)', 
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px'
+                    }}
+                  />
                   <Legend />
                   <Line
                     type="monotone"
                     dataKey="mood"
                     stroke="#f59e0b"
-                    strokeWidth={2}
-                    dot={{ fill: '#f59e0b', r: 4 }}
+                    strokeWidth={3}
+                    dot={{ fill: '#f59e0b', r: 5, strokeWidth: 2, stroke: '#fff' }}
+                    activeDot={{ r: 7 }}
                     name="Mood Score (1-5)"
                   />
                 </LineChart>

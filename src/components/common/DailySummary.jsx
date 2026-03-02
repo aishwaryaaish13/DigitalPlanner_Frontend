@@ -118,16 +118,17 @@ export default function DailySummary() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`bg-gradient-to-br ${getBackgroundGradient()} rounded-xl shadow-lg p-6 w-full max-w-4xl mx-auto border border-gray-200 dark:border-gray-700`}
+      className={`bg-gradient-to-br ${getBackgroundGradient()} rounded-2xl shadow-xl p-8 w-full border-2 border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300`}
     >
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-6">
         <motion.h2
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-bold text-gray-800 dark:text-white"
+          className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-3"
         >
-          📋 Daily Summary
+          <span className="text-4xl">📋</span>
+          <span>Daily Summary</span>
         </motion.h2>
         
         {summary.percentage > 0 && (
@@ -135,9 +136,9 @@ export default function DailySummary() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-            className={`flex items-center gap-1 text-2xl font-bold ${getTrendColor()}`}
+            className={`flex items-center gap-2 text-3xl font-bold ${getTrendColor()} bg-white/50 dark:bg-gray-800/50 px-4 py-2 rounded-xl`}
           >
-            <span>{getTrendIcon()}</span>
+            <span className="text-4xl">{getTrendIcon()}</span>
             <span>{summary.percentage}%</span>
           </motion.div>
         )}
@@ -147,9 +148,9 @@ export default function DailySummary() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="space-y-4"
+        className="space-y-6"
       >
-        <p className="text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
+        <p className="text-xl text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
           {summary.message}
         </p>
 
@@ -157,9 +158,9 @@ export default function DailySummary() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4 border-l-4 border-blue-500"
+          className="bg-white/70 dark:bg-gray-800/70 rounded-xl p-6 border-l-4 border-blue-500 shadow-md"
         >
-          <p className="text-base text-gray-800 dark:text-gray-100 font-medium">
+          <p className="text-lg text-gray-800 dark:text-gray-100 font-semibold">
             {summary.motivation}
           </p>
         </motion.div>
@@ -168,10 +169,10 @@ export default function DailySummary() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="flex items-center justify-between pt-2 text-sm text-gray-600 dark:text-gray-400"
+          className="flex items-center justify-between pt-4 text-base text-gray-600 dark:text-gray-400 border-t border-gray-300 dark:border-gray-600"
         >
-          <span>Yesterday's Tasks: {summary.yesterdayTasks}</span>
-          <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</span>
+          <span className="font-medium">Yesterday's Tasks: <span className="text-lg font-bold text-gray-800 dark:text-white">{summary.yesterdayTasks}</span></span>
+          <span className="font-medium">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</span>
         </motion.div>
       </motion.div>
     </motion.div>

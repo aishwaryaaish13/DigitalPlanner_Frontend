@@ -65,29 +65,29 @@ export default function FocusMode() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 rounded-2xl shadow-lg p-6 h-full flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 w-full max-w-md"
       >
         <motion.h1
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white"
+          className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-white"
         >
           Focus Mode
         </motion.h1>
         
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <motion.div
             key={timeLeft}
             initial={{ scale: 1 }}
             animate={{ scale: isRunning && timeLeft % 2 === 0 ? 1.02 : 1 }}
             transition={{ duration: 0.5 }}
-            className="text-7xl font-bold text-purple-600 dark:text-purple-400 mb-4"
+            className="text-5xl font-bold text-purple-600 dark:text-purple-400 mb-3"
           >
             {formatTime(timeLeft)}
           </motion.div>
@@ -105,14 +105,14 @@ export default function FocusMode() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="flex gap-3 justify-center mb-6"
+          className="flex gap-2 justify-center mb-4"
         >
           {!isRunning ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleStart}
-              className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
+              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors text-sm"
             >
               Start
             </motion.button>
@@ -121,7 +121,7 @@ export default function FocusMode() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePause}
-              className="px-8 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold transition-colors"
+              className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold transition-colors text-sm"
             >
               Pause
             </motion.button>
@@ -130,7 +130,7 @@ export default function FocusMode() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleReset}
-            className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+            className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-sm"
           >
             Reset
           </motion.button>
@@ -143,7 +143,7 @@ export default function FocusMode() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
               transition={{ type: "spring", stiffness: 200 }}
-              className="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-200 px-4 py-3 rounded-lg text-center"
+              className="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-200 px-3 py-2 rounded-lg text-center text-sm"
             >
               🎉 Great job! You completed a focus session!
             </motion.div>

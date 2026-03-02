@@ -93,29 +93,31 @@ export default function ProductivityHeatmap() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 w-full max-w-4xl mx-auto"
+      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 flex flex-col items-center h-full"
     >
-      <motion.h2
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="text-2xl font-bold text-gray-800 dark:text-white mb-4"
-      >
-        Productivity Heatmap
-      </motion.h2>
-      <motion.p
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="text-sm text-gray-600 dark:text-gray-400 mb-6"
-      >
-        Last 30 days of activity
-      </motion.p>
+      <div className="w-full">
+        <motion.h2
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-xl font-bold text-gray-800 dark:text-white mb-2 text-center"
+        >
+          Productivity Heatmap
+        </motion.h2>
+        <motion.p
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-xs text-gray-600 dark:text-gray-400 mb-6 text-center"
+        >
+          Last 30 days of activity
+        </motion.p>
+      </div>
 
-      <div className="relative">
-        <div className="flex gap-1">
+      <div className="relative flex justify-center w-full flex-1 items-center">
+        <div className="flex gap-2">
           {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} className="flex flex-col gap-1">
+            <div key={weekIndex} className="flex flex-col gap-2">
               {week.map((day, dayIndex) => (
                 <div
                   key={dayIndex}
@@ -132,13 +134,13 @@ export default function ProductivityHeatmap() {
                         type: "spring",
                         stiffness: 200
                       }}
-                      whileHover={{ scale: 1.2, zIndex: 10 }}
-                      className={`w-8 h-8 rounded ${getColorClass(day.taskCount)} 
+                      whileHover={{ scale: 1.15, zIndex: 10 }}
+                      className={`w-10 h-10 rounded-lg ${getColorClass(day.taskCount)} 
                         transition-all duration-200 hover:ring-2 hover:ring-blue-500 
-                        cursor-pointer`}
+                        cursor-pointer shadow-sm`}
                     />
                   ) : (
-                    <div className="w-8 h-8" />
+                    <div className="w-10 h-10" />
                   )}
                 </div>
               ))}
@@ -172,10 +174,10 @@ export default function ProductivityHeatmap() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="flex items-center gap-2 mt-6 text-xs text-gray-600 dark:text-gray-400"
+        className="flex items-center justify-center gap-3 mt-6 text-sm text-gray-600 dark:text-gray-400 w-full"
       >
         <span>Less</span>
-        <div className="flex gap-1">
+        <div className="flex gap-1.5">
           {[0, 1, 2, 3, 4].map((level) => (
             <motion.div
               key={level}
@@ -183,7 +185,7 @@ export default function ProductivityHeatmap() {
               animate={{ scale: 1 }}
               transition={{ delay: 0.6 + level * 0.05 }}
               whileHover={{ scale: 1.3 }}
-              className={`w-4 h-4 rounded ${
+              className={`w-5 h-5 rounded ${
                 level === 0 ? 'bg-gray-200 dark:bg-gray-700' :
                 level === 1 ? 'bg-green-200 dark:bg-green-900' :
                 level === 2 ? 'bg-green-400 dark:bg-green-700' :
